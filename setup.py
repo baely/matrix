@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pymat", # Replace with your own username
+    name="PyMat",
     version="0.0.1",
     author="baely",
     author_email="me@baely.dev",
