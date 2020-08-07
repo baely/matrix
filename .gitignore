@@ -1,2 +1,7 @@
 test.py
+monopoly.py
 .idea
+*.pyc
+build/*
+dist/*
+*.egg-info/*
