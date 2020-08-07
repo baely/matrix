@@ -27,13 +27,13 @@ class Matrix:
 
     def __add__(self, other):
         if isinstance(other, int):
-            return Matrix.create_from_load(
+            return Matrix(
                 [[self[i, j] + other for j in range(self.cols)] for i in
                  range(self.rows)])
 
         if isinstance(other, Matrix):
             if self.rows == other.rows and self.cols == other.cols:
-                return Matrix.create_from_load(
+                return Matrix(
                     [[self[i, j] + other[i, j] for j in range(self.cols)] for i
                      in range(self.rows)])
             raise ValueError()
@@ -49,17 +49,17 @@ class Matrix:
         if len(rs) == 1 and len(cs) == 1:
             return self.data[r][c]
 
-        return Matrix.create_from_load([[self[i, j] for j in cs] for i in rs])
+        return Matrix([[self[i, j] for j in cs] for i in rs])
 
     def __mul__(self, other):
         if isinstance(other, int):
-            return Matrix.create_from_load(
+            return Matrix(
                 [[self[i, j] * other for j in range(self.cols)] for i in
                  range(self.rows)])
 
         if isinstance(other, Matrix):
             if self.cols == other.rows:
-                return Matrix.create_from_load([[sum(
+                return Matrix([[sum(
                     [self[i, j] * other[j, k] for j in range(self.cols)]) for k
                                                  in range(other.cols)] for i in
                                                 range(self.rows)])
@@ -84,16 +84,6 @@ class Matrix:
             ) for i in range(self.rows)]
         )
 
-    @staticmethod
-    def create_from_load(load_list: List[List[int]]):
-        rows = len(load_list)
-        cols = max([len(row) for row in load_list])
-
-        matrix = Matrix(rows, cols)
-        matrix.load(load_list)
-
-        return matrix
-
     def load(self, load_list: List[List[int]]):
         for i, row in enumerate(load_list):
             for j, col in enumerate(row):
@@ -106,10 +96,5 @@ class Matrix:
             return index[0] * self.cols + index[1]
 
     def transpose(self):
-        data = [[self[i, j] for i in range(self.rows)] for j in
-                range(self.cols)]
-
-        matrix = Matrix(self.cols, self.rows)
-        matrix.load(data)
-
-        return matrix
+        return Matrix([[self[i, j] for i in range(self.rows)] for j in
+                       range(self.cols)])
