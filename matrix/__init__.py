@@ -1,3 +1,4 @@
+import csv
 from functools import reduce
 from typing import List, Optional, Union
 
@@ -70,6 +71,9 @@ class Matrix:
 
         raise TypeError()
 
+    def __neg__(self):
+        return self * -1
+
     def __pow__(self, power: int, modulo=None):
         return reduce((lambda x, y: x * y), [self for _ in range(power)])
 
@@ -89,6 +93,15 @@ class Matrix:
                 ]
             ) for i in range(self.rows)]
         )
+
+    def __sub__(self, other):
+        return self + (-other)
+
+    def __truediv__(self, other):
+        if isinstance(other, Matrix):
+            return self * (other.inverse())
+
+        return self * (1 / other)
 
     def concat(self, other: 'Matrix') -> 'Matrix':
         if self.cols == 0:
@@ -155,6 +168,13 @@ class Matrix:
     def remove(self, row: int, col: int) -> 'Matrix':
         return self[:row, :col].join(self[:row, col + 1:]).concat(
             self[row + 1:, :col].join(self[row + 1:, col + 1:]))
+
+    def save(self, filename: str, format: str = "csv"):
+        if format == "csv":
+            with open(filename, "w") as f:
+                w = csv.writer(f, delimiter=",")
+                for row in self.data:
+                    w.writerow(row)
 
     def transpose(self) -> 'Matrix':
         return Matrix([[self[i, j] for i in range(self.rows)] for j in
